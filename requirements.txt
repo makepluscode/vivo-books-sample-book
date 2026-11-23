@@ -1,2 +1,2 @@
-langchain==0.3.25
-langchain-core==0.3.61
+langchain==1.5.0
+langchain-core==1.8.1

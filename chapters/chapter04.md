@@ -3,11 +3,11 @@
 > VIVO BOOKS 데모용 가상 기술서예요. 실제로 출간된 책의 원고나 예제가 아니에요.
 
 <!-- drift:explanation -->
-`langchain.prompts`에서 `ChatPromptTemplate`을 가져와 질문이 들어갈 자리(`{question}`)가 있는 프롬프트를 만들어요. 프롬프트, 모델, 출력 파서를 `|`로 이어 체인을 만들고 `invoke()`에 질문을 넘기면 문자열 답이 나와요.
+`ChatPromptTemplate`은 `langchain_core.prompts`에서 가져와요. LangChain v1부터 `langchain` 패키지는 에이전트에 꼭 필요한 기능 위주로 정리되어 `langchain.prompts` 경로로는 더 이상 가져올 수 없어요. `ChatPromptTemplate.from_template()`은 템플릿 문자열 하나로 사람(human) 메시지 하나짜리 채팅 프롬프트를 만들고, 그 안의 `{question}` 자리에 질문이 들어가요. 프롬프트, 모델, 출력 파서를 `|`로 이어 체인을 만들고 `invoke()`에 `{"question": 질문}` 딕셔너리를 넘기면, 모델이 돌려준 메시지를 `StrOutputParser`가 문자열로 바꿔 줘요. 그래서 `ask()`는 이 문자열을 그대로 반환해요.
 <!-- /drift:explanation -->
 
 ```python
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from vivo_demo import make_chat_model
 
