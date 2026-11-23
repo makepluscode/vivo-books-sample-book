@@ -1,6 +1,6 @@
 # 날씨 도우미로 배우는 LangChain 첫걸음 (가상 기술서)
 
-[VIVO BOOKS — 살아 있는 기술서](https://github.com/makepluscode/vivo-books)(제1회 라이너 해커톤 출품작)가 감시하는 **데모용 가상 기술서**예요. 실제로 출간된 책의 원고나 예제가 아니에요.
+[VIVO BOOKS — 살아 있는 기술서](https://github.com/makepluscode/vivo-books-agent)(제1회 라이너 해커톤 출품작)가 감시하는 **데모용 가상 기술서**예요. 실제로 출간된 책의 원고나 예제가 아니에요.
 
 LangChain에 새 버전이 나오면 VIVO BOOKS가 이 책의 예제를 최신 환경에서 실행해 보고, Liner로 공식 문서 근거를 찾아 원고와 예제를 고친 개정판을 **Pull Request**로 보내요. 저자는 PR에서 바뀐 원고, 예제 파일, 독자 정오표, 개정 EPUB을 검토하고 병합할지 정해요.
 
