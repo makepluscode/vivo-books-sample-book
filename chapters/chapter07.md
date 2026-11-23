@@ -3,49 +3,28 @@
 > VIVO BOOKS 데모용 가상 기술서예요. 실제로 출간된 책의 원고나 예제가 아니에요.
 
 <!-- drift:explanation -->
-이 예제는 LangChain 0.3 방식이에요. `Tool`로 날씨 도구를 감싸고, `create_react_agent()`로 ReAct 에이전트를 만든 뒤 `AgentExecutor`로 실행해요. `invoke()`에 `question`을 넘기면 결과 딕셔너리의 `output`에 최종 답이 담겨요.
+이 예제는 LangChain 1.x 방식이에요. 0.3의 `create_react_agent()`와 `AgentExecutor` 조합 대신 `create_agent()` 하나로 에이전트를 만들어요. `tools`에는 `BaseTool` 인스턴스를 그대로 넘길 수 있어서 `weather` 도구를 `Tool`로 다시 감싸지 않고 리스트에 바로 넣어요. ReAct 형식 프롬프트 템플릿은 더 이상 필요 없고, 에이전트의 역할만 `system_prompt` 문자열로 알려 줘요. 입력도 달라졌어요. `invoke()`에는 `{"messages": [{"role": "user", "content": city}]}`처럼 메시지 목록을 넘겨요. 반환값은 `messages` 목록을 담은 상태 딕셔너리이고, 최종 답은 이 목록의 마지막 AI 메시지인 `result["messages"][-1].content`에서 꺼내요.
 <!-- /drift:explanation -->
 
 ```python
-from langchain.agents import Tool
-from langchain.agents.agent import AgentExecutor
-from langchain.agents.react.agent import create_react_agent
-from langchain_core.prompts import ChatPromptTemplate
+from langchain.agents import create_agent
 from vivo_demo import make_model, weather
 
-# 1. ReAct 형식 프롬프트: 생각 → 도구 호출 → 관찰 → 최종 답
-prompt = ChatPromptTemplate.from_template(
-    """당신은 날씨 질문에 답하는 도우미예요. 필요하면 다음 도구를 쓸 수 있어요:
-{tools}
-
-Use the following format:
-Question: the input question you must answer
-Thought: you should always think about what to do
-Action: the action to take, should be one of [{tool_names}]
-Action Input: the input to the action
-Observation: the result of the action
-Thought: I now know the final answer
-Final Answer: the final answer to the original input question
-
-Question: {question}
-Thought:{agent_scratchpad}"""
-)
+# 1. 시스템 프롬프트: ReAct 형식 템플릿 대신 에이전트의 역할만 알려 줘요
+SYSTEM_PROMPT = "당신은 날씨 질문에 답하는 도우미예요. 필요하면 weather 도구를 써서 답하세요."
 
 
 def answer_city(city):
     # 2. 테스트용 모델과 날씨 도구
     llm = make_model(city)
-    weather_tool = Tool(name="weather", func=weather.run,
-                        description="도시 이름을 받아 현재 날씨를 알려 주는 도구")
-    tools = [weather_tool]
+    tools = [weather]
 
-    # 3. 에이전트와 실행기
-    agent = create_react_agent(llm, tools, prompt)
-    agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True)
+    # 3. 에이전트 만들기 (별도의 실행기가 필요 없어요)
+    agent = create_agent(llm, tools=tools, system_prompt=SYSTEM_PROMPT)
 
     # 4. 실행하고 최종 답 꺼내기
-    result = agent_executor.invoke({"question": city})
-    return result["output"]
+    result = agent.invoke({"messages": [{"role": "user", "content": city}]})
+    return result["messages"][-1].content
 
 
 print(answer_city("Seoul"))
