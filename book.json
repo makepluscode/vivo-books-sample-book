@@ -1,7 +1,7 @@
 {
   "book_id": "vivo-sample-weather-langchain",
   "title": "날씨 도우미로 배우는 LangChain 첫걸음 (가상 기술서)",
-  "revision": "r1",
+  "revision": "r2",
   "fixture": "vivo_demo.py",
   "source_repository": "https://github.com/makepluscode/vivo-books-sample-book",
   "chapters": [
@@ -118,8 +118,8 @@
   ],
   "publication": "author-review-required; local EPUB preview only",
   "pins": {
-    "langchain": "0.3.25",
-    "langchain-core": "0.3.61"
+    "langchain": "1.5.0",
+    "langchain-core": "1.8.1"
   },
   "watch": [
     {
