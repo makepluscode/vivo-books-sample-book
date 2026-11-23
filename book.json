@@ -1,0 +1,134 @@
+{
+  "book_id": "vivo-sample-weather-langchain",
+  "title": "날씨 도우미로 배우는 LangChain 첫걸음 (가상 기술서)",
+  "revision": "r1",
+  "fixture": "vivo_demo.py",
+  "source_repository": "https://github.com/makepluscode/vivo-books-sample-book",
+  "chapters": [
+    {
+      "id": "chapter01",
+      "path": "chapter01.md",
+      "title": "실습 환경 준비하기",
+      "dependencies": [
+        "langchain-ai/langchain"
+      ],
+      "contract": "prose",
+      "version_lines": [
+        5
+      ],
+      "required_prose_lines": [
+        13,
+        15
+      ],
+      "local_prose_lines": [
+        19
+      ]
+    },
+    {
+      "id": "chapter03",
+      "path": "chapter03.md",
+      "title": "로컬 모델 이름 정하기",
+      "dependencies": [
+        "ollama/ollama"
+      ],
+      "checks": [],
+      "expected_stdout": "qwen3:8b"
+    },
+    {
+      "id": "chapter04",
+      "path": "chapter04.md",
+      "title": "프롬프트 템플릿으로 날씨 도우미 만들기",
+      "dependencies": [
+        "langchain-ai/langchain"
+      ],
+      "contract": "stdout",
+      "observe_prompt_chain": true,
+      "model_output_prefix": "도우미 답변 ← ",
+      "contract_text": "vivo_demo.make_chat_model() returns a chat model that echoes the prompt it receives, prefixed with '도우미 답변 ← '. Keep the prompt sentence, the prompt | model | parser chain and the function ask(question) returning the parsed string. print(ask(\"서울 날씨는?\")) must output exactly the expected line. Do not hardcode answers, call external APIs or read/write files.",
+      "search_queries": [
+        "site:docs.langchain.com/oss/python/migrate/langchain-v1 langchain.prompts ChatPromptTemplate langchain_core.prompts",
+        "site:reference.langchain.com python langchain_core prompts ChatPromptTemplate"
+      ],
+      "official_hosts": [
+        "docs.langchain.com",
+        "reference.langchain.com",
+        "python.langchain.com"
+      ],
+      "checks": [
+        {
+          "function": "ask",
+          "args": [
+            "부산 날씨는?"
+          ],
+          "expected": "도우미 답변 ← 당신은 날씨를 쉽게 설명하는 도우미예요. 다음 질문에 짧게 답해 주세요. 질문: 부산 날씨는?"
+        }
+      ],
+      "challenge": {
+        "function": "ask",
+        "expected": "도우미 답변 ← 당신은 날씨를 쉽게 설명하는 도우미예요. 다음 질문에 짧게 답해 주세요. 질문: {input}"
+      },
+      "chain_steps": [
+        "ChatPromptTemplate",
+        "EchoChatModel",
+        "StrOutputParser"
+      ],
+      "expected_stdout": "도우미 답변 ← 당신은 날씨를 쉽게 설명하는 도우미예요. 다음 질문에 짧게 답해 주세요. 질문: 서울 날씨는?",
+      "example": "ch04_prompt_template.py"
+    },
+    {
+      "id": "chapter07",
+      "path": "chapter07.md",
+      "title": "도구를 쓰는 날씨 에이전트",
+      "dependencies": [
+        "langchain-ai/langchain"
+      ],
+      "search_queries": [
+        "site:docs.langchain.com/oss/python/migrate/langchain-v1 create_agent create_react_agent AgentExecutor migration",
+        "site:reference.langchain.com python create_agent invoke messages tools"
+      ],
+      "official_hosts": [
+        "docs.langchain.com",
+        "reference.langchain.com",
+        "python.langchain.com"
+      ],
+      "checks": [
+        {
+          "function": "answer_city",
+          "args": [
+            "Busan"
+          ],
+          "expected": "Busan: sunny, 22 C"
+        },
+        {
+          "function": "answer_city",
+          "args": [
+            "Jeju"
+          ],
+          "expected": "Jeju: sunny, 22 C"
+        }
+      ],
+      "expected_stdout": "Seoul: sunny, 22 C",
+      "expected_tool_calls": [
+        "Seoul",
+        "Busan",
+        "Jeju"
+      ],
+      "example": "ch07_weather_agent.py"
+    }
+  ],
+  "publication": "author-review-required; local EPUB preview only",
+  "pins": {
+    "langchain": "0.3.25",
+    "langchain-core": "0.3.61"
+  },
+  "watch": [
+    {
+      "pypi": "langchain",
+      "repository": "langchain-ai/langchain"
+    },
+    {
+      "pypi": "langchain-core",
+      "repository": "langchain-ai/langchain"
+    }
+  ]
+}
